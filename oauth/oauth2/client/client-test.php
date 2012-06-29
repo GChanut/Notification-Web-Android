@@ -6,11 +6,11 @@ include_once "../library/OAuthRequester.php";
 require_once '../server/config.inc.php';
 
 // Clé de connexion
-if(isset($_GET['ident']) && isset($_GET['ockey'])){
+/*if(isset($_GET['ident']) && isset($_GET['ockey'])){
 
 	$id = $_GET['ident'];
 
-	$req = mysql_query("SELECT * FROM oauth_server_registry WHERE osr_usa_id_ref='$id'"); // Allez cherche les informations dans oauth_consumer_registry
+	$req = mysql_query("SELECT * FROM oauth_server_registry WHERE osr_usa_id_ref='$id'");
 	$data = mysql_fetch_array($req);
 	
 	$callb = $data['osr_callback_uri'];
@@ -35,7 +35,12 @@ if(isset($_GET['ident']) && isset($_GET['ockey'])){
 	define("CONSUMER_SECRET", $csecret);
 	//echo $_GET['consumer_key'];
 	
-}	
+}	*/
+
+//Il faut simplement mettre en brut les ck et cs du client pour chaque fichier d'appel !
+define("CONSUMER_KEY", "2e5a9c1ad9bc0c5cb6e49c9d1f59761404fe1cb99");
+define("CONSUMER_SECRET", "f343e2cf874bd6cbd379d71cfd0660b3");
+define("USER_ID","1");
 
 // URL
 define("OAUTH_HOST", "http://localhost/oauth2/server");
@@ -59,7 +64,7 @@ $store = OAuthStore::instance('MySQL', $options);
 echo '<pre>';
 
 // Identifiant de l'application
-$user_id = $id;
+$user_id = USER_ID;
 
 // Description des URLs OAuth
 $server = array(
@@ -99,7 +104,7 @@ try {
     // Callback to our (consumer) site, will be called when the user finished the authorization at the server
 	
 	
-    $callback_uri = 'http://localhost/oauth2/client/client-test.php?consumer_key='.rawurlencode($consumer_key).'&usr_id='.intval($user_id).'&callback='.$callb;
+    $callback_uri = 'http://localhost/oauth2/client/client-test.php?consumer_key='.rawurlencode($consumer_key).'&usr_id='.intval($user_id);
 	
     // Now redirect to the autorization uri and get us authorized
     if (!empty($token['authorize_uri'])) {
@@ -135,7 +140,7 @@ try {
     // Request parameters are oauth_token, consumer_key and usr_id.
     $consumer_key = $_GET['consumer_key'];
     $oauth_token = $_GET['oauth_token'];
-    $user_id = $id;
+    $user_id = USER_ID;
   
     OAuthRequester::requestAccessToken($consumer_key, $oauth_token, $user_id, 'POST', $_GET);
     $bCall = true;
@@ -179,7 +184,9 @@ try {
 	
     // $result is an array of the form: array ('code'=>int, 'headers'=>array(), 'body'=>string)
     echo $result['body'];
-	header('Location: '.$_GET['callback']);
+	
+	
+	//header('Location: '.$_GET['callback']);
   }
 }
 catch (OAuthException2 $e) {
