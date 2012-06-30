@@ -4,10 +4,27 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     >
+	<Button
+		android:id="@+id/startButton"
+		android:text="@string/start"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+	></Button>
+	<Button
+		android:id="@+id/stopButton"
+		android:text="@string/stop"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"		
+	></Button>
 	<RelativeLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    >
+	    
+
+	    
 	    <CheckBox android:id="@+id/enable"
 	    	android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"

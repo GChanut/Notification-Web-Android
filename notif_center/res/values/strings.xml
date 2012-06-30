@@ -20,5 +20,9 @@
     <string name="connecting">Connecting</string>
     <string name="connected">Connected - Please press Return</string>
     <string name="connection_problem">Problem connecting - Please press Return</string>
-    
+    <string name="start">Demarrage du service</string>
+    <string name="stop">Arrêter le service</string>
+    <string name="service_started">Service started</string>
+	<string name="service_label">Service Label</string>
+ 
 </resources>

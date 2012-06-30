@@ -91,12 +91,20 @@ public class Notif_CenterActivity extends ListActivity implements OnClickListene
 	
 	HttpClient mClient;
 	
+
+	 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+        
+        Button start = (Button)findViewById(R.id.startButton);
+        Button stop = (Button)findViewById(R.id.stopButton);
+        
+        start.setOnClickListener(startListener);
+        stop.setOnClickListener(stopListener);
+
 		HttpParams parameters = new BasicHttpParams();
 		HttpProtocolParams.setVersion(parameters, HttpVersion.HTTP_1_1);
 		HttpProtocolParams.setContentCharset(parameters, HTTP.DEFAULT_CONTENT_CHARSET);
@@ -123,6 +131,18 @@ public class Notif_CenterActivity extends ListActivity implements OnClickListene
 		this.setListAdapter(mAA);
 	}
 	
+    private OnClickListener startListener = new OnClickListener() {
+       	public void onClick(View v){
+       		startService(new Intent(Notif_CenterActivity.this, NotifyService.class));
+       	}	        	
+       };
+       
+    private OnClickListener stopListener = new OnClickListener() {
+      	public void onClick(View v){
+      		stopService(new Intent(Notif_CenterActivity.this, NotifyService.class));
+      	}	        	
+      };
+      
 	@Override
 	public void onResume() {
 		super.onResume();
