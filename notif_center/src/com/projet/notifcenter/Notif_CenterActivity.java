@@ -74,9 +74,9 @@ public class Notif_CenterActivity extends ListActivity implements OnClickListene
 
 	ProgressDialog postDialog = null;
 
-	public static final String REQUEST_TOKEN_URL = "http://andro.franceserv.com/oauth2m/server/request_token.php";
-	public static final String ACCESS_TOKEN_URL = "http://andro.franceserv.com/oauth2m/server/access_token.php";
-	public static final String AUTHORIZE_URL = "http://andro.franceserv.com/oauth2m/server/authorize.php";
+	public static final String REQUEST_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/request_token.php";
+	public static final String ACCESS_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/access_token.php";
+	public static final String AUTHORIZE_URL = "http://notifcenter.zapto.org/oauth2m/server/authorize.php";
 
 	private OAuthConsumer mConsumer = null;
 	
@@ -126,7 +126,7 @@ public class Notif_CenterActivity extends ListActivity implements OnClickListene
 		mButton.setOnClickListener(this);
 		mCB.setOnClickListener(this);
 		mSettings = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
-		mConsumer = new CommonsHttpOAuthConsumer("f9c65c8085fd8fd3c33a2dedff2c955904fe1cbf1", "acdc60e1fa57c800966e12b98aeaa918");
+		mConsumer = new CommonsHttpOAuthConsumer("511084bd6aff5a79128b2ddeabc81c8f04ff8b228", "cfd941c23d21f01103451672c05dc374");
 		mAA = new MyArrayAdapter(this, android.R.layout.two_line_list_item, android.R.id.text1, mHomeStatus);
 		this.setListAdapter(mAA);
 	}

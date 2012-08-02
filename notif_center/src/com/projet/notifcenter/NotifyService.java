@@ -52,16 +52,13 @@ public class NotifyService extends Service {
         CharSequence text = getText(R.string.service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.android, text,
-                System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.android, text, System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Notif_CenterActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, Notif_CenterActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, getText(R.string.service_label),
-                       text, contentIntent);
+        notification.setLatestEventInfo(this, getText(R.string.service_label),text, contentIntent);
 
         // Send the notification.
         // We use a layout id because it is a unique number.  We use it later to cancel.

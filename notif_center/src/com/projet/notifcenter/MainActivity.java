@@ -31,11 +31,11 @@ public class MainActivity extends Activity {
 	public static final String REQUEST_TOKEN = "request_token";
 	public static final String REQUEST_SECRET = "request_secret";
 
-	public static final String REQUEST_TOKEN_URL = "http://andro.franceserv.com/oauth2m/server/request_token.php";
-	public static final String ACCESS_TOKEN_URL = "http://andro.franceserv.com/oauth2m/server/access_token.php";
-	public static final String AUTHORIZE_URL = "http://andro.franceserv.com/oauth2m/server/authorize.php";
+	public static final String REQUEST_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/request_token.php";
+	public static final String ACCESS_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/access_token.php";
+	public static final String AUTHORIZE_URL = "http://notifcenter.zapto.org/oauth2m/server/authorize.php";
 
-	private static final Uri CALLBACK_URI = Uri.parse("icecondor-android-app:///");
+	private static final Uri CALLBACK_URI = Uri.parse("x-oauthflow://callback");
 
 	public static final String PREFS = "MyPrefsFile";
 
@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
       
 
   
-        mConsumer = new CommonsHttpOAuthConsumer("f9c65c8085fd8fd3c33a2dedff2c955904fe1cbf1", "acdc60e1fa57c800966e12b98aeaa918");
+        mConsumer = new CommonsHttpOAuthConsumer("511084bd6aff5a79128b2ddeabc81c8f04ff8b228", "cfd941c23d21f01103451672c05dc374");
 		
 		mProvider = new CommonsHttpOAuthProvider (REQUEST_TOKEN_URL, ACCESS_TOKEN_URL, AUTHORIZE_URL);
 		
@@ -69,29 +69,24 @@ public class MainActivity extends Activity {
 		
 
 		if (i.getData() == null) {
-			/*try {*/
+			try {
                                 // This is really important. If you were able to register your real callback Uri with Twitter, and not some fake Uri
                                 // like I registered when I wrote this example, you need to send null as the callback Uri in this function call. Then
                                 // Twitter will correctly process your callback redirection
-				
 
 				
-				//String authUrl = mProvider.retrieveRequestToken(mConsumer, CALLBACK_URI.toString());
+				String authUrl;
 				
+				authUrl = mProvider.retrieveRequestToken(mConsumer, CALLBACK_URI.toString());
 				saveRequestInformation(mSettings, mConsumer.getToken(), mConsumer.getTokenSecret());
+
 				
 				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("http://andro.franceserv.com/oauth2m/client/client-test.php?ockey=f9c65c8085fd8fd3c33a2dedff2c955904fe1cbf1&ident=2"));
+				intent.setData(Uri.parse(authUrl));
 				startActivity(intent);
 				
-				/*Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(authUrl));
-				startActivity(intent);*/
-				
-
-
-				
-			/*} catch (OAuthMessageSignerException e) {
+	
+			} catch (OAuthMessageSignerException e) {
 				e.printStackTrace();
 			} catch (OAuthNotAuthorizedException e) {
 				e.printStackTrace();
@@ -99,7 +94,7 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			} catch (OAuthCommunicationException e) {
 				e.printStackTrace();
-			}*/
+			}
 		}
 	}
 
@@ -135,6 +130,7 @@ public class MainActivity extends Activity {
 				MainActivity.saveRequestInformation(mSettings, null, null);
 				i.putExtra(USER_TOKEN, token);
 				i.putExtra(USER_SECRET, secret);
+				
 			} catch (OAuthMessageSignerException e) {
 				e.printStackTrace();
 			} catch (OAuthNotAuthorizedException e) {
