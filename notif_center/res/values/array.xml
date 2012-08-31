@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Interval">
+        <item >Toutes les 10 secondes</item>
+        <item >Toutes les 2 minutes</item>
+        <item >Toutes les 3 heures</item>
+        <item >Toutes les 4 heures</item>
+    </string-array>
+    
+    <string-array name="IntervalValue">
+        <item >10</item>
+        <item >120</item>
+        <item >10800</item>
+        <item >14400</item>
+    </string-array>
+
+    
+</resources>
