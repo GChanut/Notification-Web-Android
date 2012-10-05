@@ -17,11 +17,13 @@ public final class R {
     public static final class drawable {
         public static final int android=0x7f020000;
         public static final int backg=0x7f020001;
-        public static final int cvimg=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int icon=0x7f020004;
+        public static final int backnc=0x7f020002;
+        public static final int cvimg=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int icon=0x7f020005;
     }
     public static final class id {
+        public static final int ProgressBar01=0x7f070007;
         public static final int linearLayout1=0x7f070001;
         public static final int login=0x7f070002;
         public static final int name=0x7f070000;

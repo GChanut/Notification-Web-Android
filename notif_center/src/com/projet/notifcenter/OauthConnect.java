@@ -62,9 +62,9 @@ public class OauthConnect extends Activity {
 	public static final String REQUEST_TOKEN = "request_token";
 	public static final String REQUEST_SECRET = "request_secret";
 
-	public static final String REQUEST_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/request_token.php";
-	public static final String ACCESS_TOKEN_URL = "http://notifcenter.zapto.org/oauth2m/server/access_token.php";
-	public static final String AUTHORIZE_URL = "http://notifcenter.zapto.org/oauth2m/server/authorize.php";
+	public static final String REQUEST_TOKEN_URL = "http://notifcenter.zapto.org/notifcenter/oauth2m/server/request_token.php";
+	public static final String ACCESS_TOKEN_URL = "http://notifcenter.zapto.org/notifcenter/oauth2m/server/access_token.php";
+	public static final String AUTHORIZE_URL = "http://notifcenter.zapto.org/notifcenter/oauth2m/server/authorize.php";
 
 	private static final Uri CALLBACK_URI = Uri.parse("x-oauthflow://callback");
 
@@ -81,7 +81,7 @@ public class OauthConnect extends Activity {
         setContentView(R.layout.main);
 
         
-        mConsumer = new CommonsHttpOAuthConsumer("511084bd6aff5a79128b2ddeabc81c8f04ff8b228", "cfd941c23d21f01103451672c05dc374");
+        mConsumer = new CommonsHttpOAuthConsumer("8e690eff7181157760c39ed4f5e1c81f050467337", "f8a98a16deb494df11f794bac1b2641d");
 		
 		mProvider = new CommonsHttpOAuthProvider (REQUEST_TOKEN_URL, ACCESS_TOKEN_URL, AUTHORIZE_URL);
 		
@@ -118,7 +118,7 @@ public class OauthConnect extends Activity {
 		        ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager(params, registry);
 		        HttpClient client = new DefaultHttpClient(manager, params);
 				Bundle extra = getIntent().getExtras();
-				HttpPost httppost = new HttpPost("http://notifcenter.zapto.org/oauth2m/server/logon.php?goto=/oauth2m/server/authorize.php?oauth_token="+mConsumer.getToken()+"&oauth_callback="+CALLBACK_URI.toString());
+				HttpPost httppost = new HttpPost("http://notifcenter.zapto.org/notifcenter/oauth2m/server/mlog.php");
 
 			    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(); //On crée la liste qui contiendra tous nos paramètres
 			    nameValuePairs.add(new BasicNameValuePair("username", extra.getString("usrnm")));
@@ -131,7 +131,8 @@ public class OauthConnect extends Activity {
 			    HttpEntity entity = response.getEntity();
 
 			    responseText = EntityUtils.toString(entity);   
-
+			    
+			    
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			    
 			    //Test login et mdp
@@ -147,11 +148,11 @@ public class OauthConnect extends Activity {
 					finish();
 			    }else{
 			    	WebView webView = (WebView) findViewById(R.id.webview);	  
-			  		webView.loadUrl("http://notifcenter.zapto.org/oauth2m/server/logon.php?goto=/oauth2m/server/authorize.php?oauth_token="+mConsumer.getToken()+"&oauth_callback="+CALLBACK_URI.toString());
+			  		webView.loadUrl(authUrl+"&usa="+extra.getString("usrnm"));
 			    	 
 			  		 
 					/*Intent intent = new Intent(Intent.ACTION_VIEW);			
-					intent.setData(Uri.parse(authUrl));
+					intent.setData(Uri.parse(authUrl+"&usa="+extra.getString("usrnm")));
 					startActivity(intent);*/
 			    }
 	

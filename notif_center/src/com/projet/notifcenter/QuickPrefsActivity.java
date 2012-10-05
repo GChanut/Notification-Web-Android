@@ -6,11 +6,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.projet.notifcenter.NotifyService.ClassExecutingTask;
 
+
+import android.app.Notification;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -18,6 +23,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 
 
@@ -33,11 +39,11 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
 	private static final String TAG_APPLI_NAME = "application_name";  //Nom d'une colonne json
 	private static JSONArray contacts = null;
 	private static JSONArray appli = null;
-	
+	private static boolean vibResult, ringResult;
 	private static String name;
 	private static String app;
-
 	
+
     private ArrayList<ListPreference> mListPreferences;  
     private String[] mListPreferencesKeys = new String[] {  
      "updates_interval" // The 'android:key' value of the ListPreference  
@@ -48,6 +54,7 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
     public void onCreate(Bundle savedInstanceState) {    	
         super.onCreate(savedInstanceState); 
         
+       
         //Récupération des données de l'autre Activity
         Bundle extra = getIntent().getExtras();   
         if (extra != null) {
@@ -55,20 +62,67 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
         }   
        
         addPreferencesFromResource(R.xml.preferences);  
-              
+        
+        
+        //Récuperation des multi compte choice.
+		ListPreferenceMultiSelect listPrefMultiSelect = (ListPreferenceMultiSelect) findPreference("multicompte");
+		CharSequence currText = listPrefMultiSelect.getEntry();
+		String currValue = listPrefMultiSelect.getValue();
+
+        //vibration
+        CheckBoxPreference vib= (CheckBoxPreference)findPreference("vibrate");
+        vibResult = vib.isChecked();
+        //Si je change le checkboox à la volé de vibrate
+        vib.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener(){
+      	  public boolean onPreferenceChange(Preference preference, Object newValue) {
+      		  
+      		  if(newValue.toString().equals("true")){
+      			  vibResult = new Boolean(true);
+      			Log.e("dans le check","true");
+      			
+      		  }
+      		  if(newValue.toString().equals("false")){
+      			  vibResult = new Boolean(false);
+      			Log.e("dans le check","false");
+      		  }
+      		 return true;
+      	  }
+        });
+        
+      //ringtone
+        CheckBoxPreference ring= (CheckBoxPreference)findPreference("audio");
+        ringResult = ring.isChecked();
+        //Si je change le checkboox à la volé de vibrate
+        ring.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener(){
+      	  public boolean onPreferenceChange(Preference preference, Object newValue) {
+      		  
+      		  if(newValue.toString().equals("true")){
+      			ringResult = new Boolean(true);
+      			Log.e("dans le check","true");
+      			
+      		  }
+      		  if(newValue.toString().equals("false")){
+      			ringResult = new Boolean(false);
+      			Log.e("dans le check","false");
+      		  }
+      		 return true;
+      	  }
+        });
+        
         Intent myIntent = new Intent(QuickPrefsActivity.this, NotifyService.class);
         
         ListPreference listPreference = (ListPreference) findPreference("updates_interval");
         currText = listPreference.getValue();
         final Bundle bundle = new Bundle();
-        bundle.putCharSequence("extraData", resultActivity);
-        bundle.putCharSequence("extraData2", currText);
+        bundle.putCharSequence("extraData", resultActivity); // l'user
+        bundle.putCharSequence("extraData2", currText); //Le temps de synchro selectionné
+        bundle.putCharSequence("multichoice", currValue);
+        bundle.putCharSequence("vib", new Boolean(vibResult).toString());//vibration
+        bundle.putCharSequence("ringtone", new Boolean(ringResult).toString());//ringtone envoyer service
         myIntent.putExtras(bundle);
             
-      // PendingIntent pendingIntent = PendingIntent.getService(QuickPrefsActivity.this, 0, myIntent, 0);
              
-       
-              
+        //Changement du summary sur la durée de synchro  
               mListPreferences = new ArrayList<ListPreference>();  
               SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();  
               sharedPrefs.registerOnSharedPreferenceChangeListener(this);  
@@ -80,27 +134,27 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
               }  
               
               
+
               
-              
-              
+
               
              
   
               
 /////////////////////////////////////////////////////////////////////////////////
               
-              //Si la synchronisation de données est Checked
+              //Synchronisation
               
               CheckBoxPreference syncData = (CheckBoxPreference)findPreference("update_synchro");
               
-              if(syncData.isChecked()){  //Demarrage du service s'il est déja checked       	 
-            	 // startService(new Intent(QuickPrefsActivity.this, NotifyService.class));         	  
+              if(syncData.isChecked()){  //Demarrage du service s'il est déja checked au démarrage      	 
+            	    	  
             	  Intent serviceIntent = new Intent(QuickPrefsActivity.this, NotifyService.class);
                   serviceIntent.putExtras(bundle);
                   this.startService(serviceIntent);       	    
             }
              
-              //Si on change de valeurs
+              //Si on change de valeurs du check en direct
               syncData.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {            
                   public boolean onPreferenceChange(Preference preference, Object newValue) {
                 	  if(newValue.toString().equals("true")){
@@ -126,7 +180,7 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
                         public boolean onPreferenceClick(Preference preference) {
                           	//stop le service et redirection vers le login				        								
                              stopService(new Intent(QuickPrefsActivity.this,NotifyService.class));    
-                             stopService(new Intent(QuickPrefsActivity.this, ClassExecutingTask.class));
+                             stopService(new Intent(QuickPrefsActivity.this, Thread.class));
                              Intent i = new Intent(QuickPrefsActivity.this, Main.class);
                              startActivity(i);
                              finish();
@@ -134,13 +188,26 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
                           }
                        });
               
+              //Lorsqu'on clique sur le refresh
+              Preference refresh = (Preference) findPreference("refresh");
+              refresh.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            	 
+                        public boolean onPreferenceClick(Preference preference) {
+                          	//redemarrage service	
+                        	 
+                             Intent i = new Intent(QuickPrefsActivity.this, QuickPrefsActivity.class);
+                             startActivity(i);
+                             finish();
+                             return true;   
+                          }
+                       });
               
               //Obtention de l'user qui se connecte
               String user = getUser();
               Preference etp = (Preference) findPreference("customPref");
               etp.setTitle(user);
     }  
-    //Fin du OnCreate
+    //Fin du onCreate
         
        
        public void onSharedPreferenceChanged(SharedPreferences pref, String prefKey) {  
@@ -158,7 +225,7 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
     	JSONParser jParser = new JSONParser();
     	
 		// getting JSON string from URL
-		JSONObject json = jParser.getJSONFromLink("http://notifcenter.zapto.org/api/json/"+resultActivity+".json");
+		JSONObject json = jParser.getJSONFromLink("http://notifcenter.zapto.org/notifcenter/oauth2m/api/json/"+resultActivity+".json");
 		
 		//JSONObject json = jParser.getJSONFromUrl("http://andro.franceserv.com/sysadmin.json");
 		try {
@@ -184,10 +251,9 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
   
 	public static CharSequence[] getApplications(){
     	JSONParser jParser = new JSONParser();
-    	CharSequence var[] = new String[4]; //peut causé des problème
-		// getting JSON string from URL
-    	
-		JSONObject json = jParser.getJSONFromLink("http://notifcenter.zapto.org/api/json/"+resultActivity+".json");
+    	CharSequence var[] = new String[getNumberApplication()]; //peut causé des problème
+		// getting JSON string from URL  	
+		JSONObject json = jParser.getJSONFromLink("http://notifcenter.zapto.org/notifcenter/oauth2m/api/json/"+resultActivity+".json");
 		
     	try {
 			// Getting Array of Contacts
@@ -210,7 +276,27 @@ public class QuickPrefsActivity extends PreferenceActivity implements SharedPref
 		}  
     return var;
     }
+	
+	
     
-    
-    
+	public static int getNumberApplication(){
+		int i;
+		JSONParser jParser = new JSONParser();
+		JSONObject json = jParser.getJSONFromLink("http://notifcenter.zapto.org/notifcenter/oauth2m/api/json/"+resultActivity+".json");
+		try {
+			appli = json.getJSONArray(TAG_APPLICATION);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(json.getJSONArray(TAG_APPLICATION));
+		
+		// looping through All Contacts
+		for(i = 0; i < appli.length(); i++){
+		}
+		return i;
+	}
+	
+
+	
 }
