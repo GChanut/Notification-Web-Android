@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="scripts/valid.js"></script>
+<link rel="stylesheet" media="screen" type="text/css" href="css/style.css"/>
+
+<title>Untitled Document</title>
+</head>
+
+<body>
+<form method="post">
+<table>
+				<tr><td><label for="pseudo">Pseudo(seulement 0-9,a-z,A-Z)</label> :</td><td> <input type="text" name="pseudo" class="in" id="f"/>
+				<script type="text/javascript">
+		         var f1 = new LiveValidation('f');
+				 f1.add( Validate.Presence );
+				</script>
+				<br /></tr></td>
+				<tr><td><label for="nom">Nom</label> :</td><td> <input type="text" name="nom" class='in' id="f1"/> 
+				<script type="text/javascript">
+		         var f1 = new LiveValidation('f1');
+				f1.add( Validate.Presence );
+				</script>
+				<br /></tr></td>
+				<tr><td><label for="prenom">Prenom</label> : </td><td><input type="text" name="prenom" class='in' id="f2"/> 
+				<script type="text/javascript">
+		         var f1 = new LiveValidation('f2');
+				 f1.add( Validate.Presence );
+				</script>
+				<br /></tr></td>
+				<tr><td><label for="email">E-Mail</label> : </td><td><input type="text" name="email" class="in" id="f3"/>
+                <script>
+				var f20 = new LiveValidation('f3');
+				f20.add( Validate.Email );
+				</script>
+				<br /></tr></td>
+				<tr><td><label for="mdp">Mot de Passe</label> : </td><td><input type="text" name="mdp" class="in" id="f4"/><br /></tr></td><script type="text/javascript">
+		         var f1 = new LiveValidation('f4');
+				 f1.add( Validate.Presence );
+				</script>
+				<tr><td><label for="mdp2">Mot de Passe (confirmation)</label> : </td><td><input type="text" name="mdp2" class="in" id="f5"/><script>var f19 = new LiveValidation('f5');
+f19.add( Validate.Confirmation, { match: 'f4' } );</script><br /></tr></td>
+				
+				<tr><td><input type='submit' value="S'inscrire"></td></tr>
+</table>
+</form>
+
+</body>
+</html>

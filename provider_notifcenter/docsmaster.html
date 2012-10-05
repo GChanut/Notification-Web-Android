@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+   <head>
+      <title>Documentation - Notif Center API</title>
+   </head>
+   <body>
+   
+   <div style="padding: 10px 10px 10px 10px; margin-right:auto; margin-left: auto; border-color: black; border-width: 1px; border-style:solid; height:auto; overflow:auto; width: 800px;"> 
+	   <h1> Introduction </h1>
+			<br />Si vous êtes Webmaster et désirez que vos utilisateurs soient connectés de partout à votre site, c'est maintenant possible!
+			<br />Notif'Center est l'intermédiaire entre le site que vous gérez et ses utilisateurs
+
+			<br />Afin d'intégrer notre service, nous vous conseillons de bien lire cette documentation.
+		<h1> Les premières étapes </h1>
+			<br />Pour commencer, il va falloir inscrire le site à notre base de données. 
+			<br />
+			<br />Pour cela inscrivez-vous ici: <a href="index.php" >Inscription</a> (Il est nécessaire pour nous de connaitre les Webmasters qui ont enregistré leur application par mesure de sécurité.)
+			<p> <div style="text-align:center"><img src="docs/register.jpg"/></div></p>
+			
+			<br />Et enregistrez votre site ici: <a href="oauth2m/server/oauth_register.php" >Enregistrer le site</a>
+			<p><div style="text-align:center"><img src="docs/registerapp.jpg"/></div></p>
+			<br />Si l'enregistrement de l'application à réussit, vous devriez voir apparaitre votre consumer_key et consumer_secret:
+			<br />ATTENTION: notez bien ses clefs car elles vous serviront plus tard. Ce sont elles qui identifieront votre site! 
+			<p><div style="text-align:center"><img src="docs/keys.jpg"/></div></p>
+			<br />Téléchargez la librairie OAuth sur ce lien: <a href="docs/librarie-oauth-NC.zip" >Librairie Oauth Notif'Center</a>
+			<br />Ce fichier sera la jonction entre votre site et Notif'Center.
+
+		<h1>Utilisation de l'API</h1>
+			<h2>Verify Credentials</h2>
+				<br />Le verify_credentials permet à votre site d'utiliser notre base de données pour une gestion de compte. (Exemple: J'utilise mon compte Facebook pour avoir un compte Deezer).
+				<br />
+				<br />Afin d'avoir accès au verify_credentials, il lui faut comme paramètre l'access token de l'utilisateur. Il faut donc pour cela que votre utilisateur ce soit préalablement inscrit à Notif'Center.
+				<br />
+				<br />Cela retourna l'username de l'utilisateur, à vous de le manipulez comme bon vous semble pour votre propre gestion de compte.
+				<br />
+				<br />Il faudra bien penser à inclure la libraire OAuth précédemment téléchargé dans chaque page
+				<br />Voici un exemple d'utilisation à télécharger: <a href="NC-verify_crendential-demo.zip">Demo connexion</a>
+				<br/>
+				<br />Dans config.inc.php mettre la consumers_key et la consumer_secret que vous aviez noté et l'adresse du callback (l'adresse du fichier callback.php contenu dans le dossier).
+				<br />Nous remarquons dans index.php la ligne:
+				<br /><code>$content = $connection->get('verify_credentials'); //Elle appel la page verify_credentials de l'API</code>
+				<br />
+				<br />Il y a très peu de chose à modifier dans le reste des pages. Elles permettent surtout la connexion et les étapes pour l'authentificaiton OAuth.
+				<br />
+				<h3>Information importante</h3>
+				
+					<br />Maintenant qu'une session est ouverte sur votre site grâce à Notif'Center, il suffit d'appeler l'access token à chaque requête que vous ferez seulement si cela concerne Notif'Center.
+					<br />Pour cela, la variable de session <code>$_SESSION['access_token']</code> contient comme attribut <code>$access_token['oauth_token']</code> et <code>$access_token['oauth_token_secret']</code>.
+			<h2>Manage Notification</h2>
+			<br />Le manage notification est le service principal de Notif'Center permettant d'envoyer aux utilisateurs de votre site un contenu que vous aurez choisit !
+			<br />
+			<br /><u>Exemple:</u> Vous êtes webmaster d'un site de CV en ligne, vous décidez d'utiliser Notif'Center afin d'informer ces utilisateur du nombre de visite qu'a pu avoir leurs CV, ou bien de les informer si quelqu'un a répondu à un poste, ou bien même les deux!
+			<br />Les simples lignes ci-dessous permettent de mettre à jour les notifs des utilisateurs:
+			<br />
+			<br />
+			<code>  session_start();
+			<br/>	 $access_token = $_SESSION['access_token'];
+			<br/>	 $content = 'je mets un contenu';
+			<br/>	 header('Location: http://notifcenter.zapto.org/notifcenter/oauth2m/api/manage_notification.php?oauth_token='.$access_token['oauth'].'&content='.$content);
+			</code>
+			<br />
+			<br />L'utilisateur recevra "je mets un contenu" comme notification de la part de votre site sur son mobile.
+			<br />
+			<br />Si nous gardons l'exemple du site avec les CVs en ligne, le Webmaster mettra ce bout de code sur la fonction d'ajout de commentaire, ou sur la fonction qui incrémente le compteur de visite.
+	</div>
+
+   </body>
+</html>
