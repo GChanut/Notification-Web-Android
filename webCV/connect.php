@@ -14,8 +14,6 @@ if (CONSUMER_KEY === '' || CONSUMER_SECRET === '') {
   exit;
 }
 
-/* Build an image link to start the redirect process. */
-$content = '<a href="./redirect.php"><img src="./img/idnc.jpg" alt="Signer avec NotifCenter"/></a>';
+require 'index.php';
  
-/* Include HTML to display on the page. */
-print_r($content);
+?>
