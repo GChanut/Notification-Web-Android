@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pj="http://schemas.android.com/apk/res/com.projet.notifcenter" >
+
+    <PreferenceCategory
+        android:key="first_category"
+        android:title="Compte" >
+
+        <Preference
+            android:key="customPref"
+            android:title="username" />
+
+        <Preference
+            android:key="disconnect"
+            android:title="Se déconnecter" />
+
+        <Preference
+            android:key="refresh"
+            android:summary="Actualisez vos paramètres ici pour qu&apos;ils soient pris en compte"
+            android:title="Actualiser" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="second_category"
+        android:title="Général" >
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="audio"
+            android:summary="Activer ou désactiver les alertes sonores"
+            android:title="Effet sonore" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="vibrate"
+            android:summary="Activer ou désactiver les vibrations"
+            android:title="Vibreur" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="third_category"
+        android:title="Synchronisation" >
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="update_synchro"
+            android:summary="Activer ou désactiver la récupération de notifications"
+            android:title="Synchronisation des données" />
+
+        <ListPreference
+            android:dependency="update_synchro"
+            android:entries="@array/Interval"
+            android:entryValues="@array/IntervalValue"
+            android:key="updates_interval"
+            android:summary="Definir le temps entre chaque synchronisation"
+            android:title="Intervalles de synchronisation" />
+
+        <com.projet.notifcenter.ListPreferenceMultiSelect
+            android:dependency="update_synchro"
+            android:dialogTitle="Les comptes"
+            android:key="multicompte"
+            android:summary="Spécifier les comptes dont vous voudriez reçevoir une notification"
+            android:title="Choisirs les comptes" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
